@@ -1,15 +1,18 @@
 package com.example.imagesearchsave
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.imagesearchsave.databinding.FragmentSearchBinding
 import com.example.imagesearchsave.databinding.ViewItemBinding
 import java.time.format.DateTimeFormatter
 
-class RecyclerAdapter(val items: MutableList<Item>) :
+class RecyclerAdapter(private val mContext: Context) :
     RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
+    var items = mutableListOf<Item>()
     interface onItemClickListener {
         fun onItemClick(position: Int)
     }
@@ -32,7 +35,9 @@ class RecyclerAdapter(val items: MutableList<Item>) :
         holder.itemView.setOnClickListener {
             itemClickListener.onItemClick(position)
         }
-        holder.img.setImageURI(items[position].img)
+        Glide.with(mContext)
+            .load(items[position].img)
+            .into(holder.img)
         holder.from.text=items[position].from
         holder.time.text=items[position].time.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
     }
